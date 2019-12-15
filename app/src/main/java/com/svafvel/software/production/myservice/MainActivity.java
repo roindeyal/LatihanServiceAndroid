@@ -2,15 +2,25 @@ package com.svafvel.software.production.myservice;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.Button;
+
+import java.lang.annotation.Native;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btnStartService, btnStartIntentService,
             btnStartBoundService, btnStopBoundService;
+
+
+    MyBoundService myBoundService;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +58,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btn_start_bound_service :
+                Intent mBoundServiceIntent = new Intent(MainActivity.this, MyBoundService.class);
+                bindService(mBoundServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
                 break;
 
 
             case R.id.btn_stop_bound_service :
+                unbindService(mServiceConnection);
                 break;
 
         }
 
     }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if(mServiceBound){
+            unbindService(mServiceConnection);
+        }
+    }
+
+    boolean mServiceBound = false;
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MyBoundService.MyBinder myBinder = (MyBoundService.MyBinder) service;
+            myBoundService = myBinder.getService();
+            mServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mServiceBound = false;
+        }
+
+
+    };
 }

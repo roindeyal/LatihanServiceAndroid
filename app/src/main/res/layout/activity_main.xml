@@ -32,14 +32,14 @@
             android:id="@+id/btn_start_bound_service"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/stop_bound_service"
+            android:text="@string/start_bound_service"
             android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btn_stop_bound_service"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/start_bound_service"
+            android:text="@string/stop_bound_service"
             android:layout_weight="1"/>
 
 
